@@ -3,9 +3,18 @@
 
 </script>
 <main class="w-full h-screen">
-    <!-- DATA -->
+    <!-- LEFT DATA COLUMN -->
     <section class="">
 
     </section>
+    <!-- MAP -->
+    <section>
 
+    </section>
+    <!-- LIVE FEED COLUMN -->
+    <section>
+
+    </section>
+
+    <!-- WATER STATIONS LIST WITH CREDIT PRODUCTION -->
 </main>

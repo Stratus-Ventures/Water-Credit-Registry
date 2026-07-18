@@ -10,9 +10,7 @@ WORKDIR /app
 # pnpm-workspace.yaml carries the build-script approvals (esbuild, @tailwindcss/oxide).
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-# --mount=type=cache keeps the pnpm store warm across builds -> fast reinstalls.
-RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Source, then build (adapter-node -> ./build).
 COPY . .
