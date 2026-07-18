@@ -5,7 +5,10 @@
 <main class="w-full h-screen">
     <!-- LEFT DATA COLUMN -->
     <section class="">
+        <!-- TOTAL CREDITS CREATED -->
+        <div>
 
+        </div>
     </section>
     <!-- MAP -->
     <section>
