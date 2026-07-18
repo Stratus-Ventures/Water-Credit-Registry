@@ -1,7 +1,11 @@
 
+<script>
 
-<main>
-    <div>
+</script>
+<main class="w-full h-screen">
+    <!-- DATA -->
+    <section class="">
 
-    </div>
+    </section>
+
 </main>
