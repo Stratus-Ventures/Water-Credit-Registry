@@ -11,7 +11,7 @@ WORKDIR /app
 # Manifests first for cached installs. pnpm-workspace.yaml carries the
 # esbuild build-script approval.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Source, then build (adapter-node -> ./build).
 COPY . .
