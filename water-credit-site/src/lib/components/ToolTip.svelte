@@ -2,8 +2,8 @@
 	let { text, class: className = '' }: { text: string; class?: string } = $props();
 </script>
 
-<!-- Hidden by default. Touch only: when its tab becomes selected (aria-current),
-     flash for 1.5s then hide. Keyboard focus still reveals it for a11y. -->
+<!-- Desktop affordance: hidden by default, revealed on hover / keyboard focus.
+     v4 gates hover to hover-capable devices, so it never fires on touch. -->
 <span
 	role="tooltip"
 	class="
@@ -11,8 +11,8 @@
 		whitespace-nowrap rounded-full px-2.5 py-1 text-sm font-medium
 		bg-button-bg text-inverted-primary-fg shadow-card
 		transition ease-snappy duration-base
+		group-hover:translate-y-0 group-hover:opacity-100
 		group-focus-visible:translate-y-0 group-focus-visible:opacity-100
-		pointer-coarse:group-aria-[current=page]:animate-tooltip-flash
 		{className}"
 >
 	{text}

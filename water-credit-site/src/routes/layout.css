@@ -120,15 +120,6 @@
 		from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
 		to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
 	}
-
-	/* One-shot label flash: rise + fade in, hold, fade out over 1.5s. Keeps the
-	   -50% x-centering throughout (uses the `translate` property, not transform). */
-	--animate-tooltip-flash: tooltip-flash 1.5s var(--ease-snappy) both;
-	@keyframes tooltip-flash {
-		0%       { opacity: 0; translate: -50% 0.5rem; }
-		12%, 78% { opacity: 1; translate: -50% 0; }
-		100%     { opacity: 0; translate: -50% 0.5rem; }
-	}
 }
 
 /* v4 has no --duration-* namespace, so expose the tokens as real utilities.
