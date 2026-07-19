@@ -6,6 +6,12 @@
     import type { Pathname } from '$app/types';
     import Icon from './Icon.svelte';
     import ToolTip from './ToolTip.svelte';
+    import { onMount } from 'svelte';
+
+    // Flip after first paint so the highlight scales in (scale-0 → scale-100)
+    // on load, instead of being there instantly or sliding in from tab 0.
+    let mounted = $state(false);
+    onMount(() => (mounted = true));
 
     const tabs = [
         { id: 0, icon: 'globe', name: 'Overview', page: '/overview' },
@@ -24,15 +30,18 @@
 <nav class="
     fixed bottom-12 sm:bottom-16 left-0 right-0 z-40
     flex flex-row justify-center items-center
-    w-fit h-fit p-1 mx-auto rounded-full
-    bg-button-bg text-inverted-primary-fg shadow-card dark:shadow-none"
+    w-fit h-fit p-1 mx-auto rounded-full bg-button-bg
+    text-inverted-primary-fg shadow-card dark:shadow-none"
 >
-    <!-- Sliding selection circle — tabs are equal width, so shift one tab per index. -->
+    <!-- Selection highlight. Positioned with the `translate` property so `scale`
+         is free to animate independently: scales in on load, scales out on non-tab
+         pages, and slides between tabs. transition-transform covers translate+scale.
+         Invariant: size == button, no gap between buttons, offset (top/left-1) == p-1. -->
     <span
         class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
-               bg-inverted-tertiary-bg transition-[transform,opacity] ease-snappy duration-base"
-        style:transform={`translateX(${activeIndex * 100}%)`}
-        style:opacity={activeIndex < 0 ? '0' : '1'}
+               bg-inverted-tertiary-bg transition-transform ease-snappy duration-base
+               {mounted && activeIndex >= 0 ? 'scale-100' : 'scale-0'}"
+        style:translate={`${activeIndex * 100}% 0`}
         aria-hidden="true"
     ></span>
 
