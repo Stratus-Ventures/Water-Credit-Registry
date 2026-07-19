@@ -1,0 +1,215 @@
+@import 'tailwindcss';
+
+/* Make the `dark:` variant follow the .dark class (not the OS setting). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* ---------- G L O B A L   S T Y L E S ---------- */
+/* These are the default styles for the whole website */
+@layer base {
+    body { @apply text-primary-fg antialiased select-none; }
+
+    /* Native form controls (checkbox, radio, range) pick up the brand accent. */
+    :root { accent-color: var(--color-accent); }
+
+    /* Affordance (#1) — interactive elements get a pointer + smooth colour feedback. */
+    button, a, label[for], summary, [role='button'] {
+        @apply cursor-pointer transition-colors;
+        -webkit-tap-highlight-color: transparent;   /* no blue flash on mobile tap */
+    }
+
+    /* Disabled state — dim and block (#1, #10). */
+    :disabled, [aria-disabled='true'] { @apply opacity-50 cursor-not-allowed; }
+
+    /* Keyboard focus only — a clean accent ring, never on mouse click (#1, #10). */
+    :focus-visible { @apply outline-2 outline-offset-2 outline-accent; }
+
+    /* Brand text selection (#6). */
+    ::selection { @apply bg-accent-faded text-primary-fg; }
+}
+
+/* ---------- T H E M E   S T Y L E S ---------- */
+/* Colors live in @theme so they generate utilities (text-primary-fg, bg-secondary-bg, …).
+   .dark overrides the same --color-* vars, so every utility flips in dark mode. */
+@theme {
+	--color-primary-fg: oklch(14.1% 0.005 285.823);
+	--color-secondary-fg: oklch(43.9% 0 none);
+	--color-tertiary-fg: oklch(70.8% 0 none);
+	--color-inverted-primary-fg: oklch(98.5% 0 none);
+	--color-inverted-secondary-fg: oklch(70.8% 0 none);
+	--color-inverted-tertiary-fg: oklch(43.9% 0 none);
+	--color-primary-bg: oklch(98.5% 0 none);
+    --color-secondary-bg: oklch(96.7% 0.001 286.375);
+    --color-tertiary-bg: oklch(92% 0.004 286.32);
+    --color-inverted-tertiary-bg: oklch(37.1% 0 none);
+	--color-frosted-bg: oklch(98.5% 0 none / 0.5);
+    --color-button-bg: oklch(14.1% 0.005 285.823);
+    --color-border: oklch(87% 0 none);
+    --color-border-faded: oklch(87% 0 none / 0.5);
+    --color-accent: oklch(68.5% 0.169 237.323);
+    --color-accent-faded: oklch(68.5% 0.169 237.323 / 0.5);
+    --color-danger: oklch(63.7% 0.237 25.331);
+    --color-warning: oklch(82.8% 0.189 84.429);
+    --color-positive: oklch(72.3% 0.219 149.579);
+    --color-negative: oklch(63.7% 0.237 25.331);
+}
+.dark {
+    --color-primary-fg: oklch(98.5% 0 none);
+   	--color-secondary-fg: oklch(70.8% 0 none);
+    --color-tertiary-fg: oklch(43.9% 0 none);
+   	--color-inverted-primary-fg: oklch(14.1% 0.005 285.823);
+   	--color-inverted-secondary-fg: oklch(43.9% 0 none);
+   	--color-inverted-tertiary-fg: oklch(70.8% 0 none);
+   	--color-primary-bg: oklch(14.1% 0.005 285.823);
+    --color-secondary-bg: oklch(27.4% 0.006 286.033);
+    --color-tertiary-bg: oklch(37.1% 0 none);
+    --color-inverted-tertiary-bg: oklch(92% 0.004 286.32);
+   	--color-frosted-bg: oklch(14.1% 0.005 285.823 / 0.5);
+    --color-button-bg: oklch(98.5% 0 none);
+    --color-border: oklch(37.1% 0 none);
+    --color-border-faded: oklch(37.1% 0 none / 0.5);
+    --color-accent: oklch(74.6% 0.16 232.661);
+    --color-accent-faded: oklch(74.6% 0.16 232.661 / 0.5);
+}
+
+
+/* ---------- T E X T   S T Y L E S ---------- */
+.display { @apply text-5xl font-medium tracking-[-0.03em] leading-tight; }                  /* Rare. Marketing hero, empty-state headline. */
+
+@layer base {
+      h1 { @apply text-4xl font-medium tracking-tight leading-tight; }                      /* Page title. One per page. */
+      h2 { @apply text-2xl font-medium tracking-[-0.02em] leading-normal; }                 /* Section heading. */
+      h3 { @apply text-xl font-medium tracking-[-0.015em] leading-normal; }                 /* Subsection, card title. */
+      h4 { @apply text-base font-medium tracking-[-0.01em] leading-normal; }                /* Small heading, dense card title. */
+      p { @apply text-base font-normal tracking-normal leading-normal select-auto; }        /* Primary reading text, longer prose. */
+}
+
+.body-medium { @apply text-base font-medium tracking-normal leading-normal select-auto; }   /* Primary reading text, Emphasis. */
+.small { @apply text-sm font-normal tracking-normal leading-normal; }                       /* Secondary/meta text, timestamps. */
+
+.hero-number { @apply text-6xl font-medium tracking-tight leading-normal; }                 /* Signature big number. Realtime count, plan size. */
+.metric { @apply text-3xl font-medium tracking-[-0.015em] leading-normal; }                 /* Metric numbers, data values. */
+.stat { @apply text-sm font-medium tracking-[-0.01em] leading-normal; }                     /* Stat-row values, table cells. Medium, near-neutral. */
+
+/* ---------- A N I M A T I O N S ---------- */
+/* ┌───────────────────────────────────────────────────────────────────────┐
+   │ RULE: animate MOVEMENT + SHOW/HIDE with `transform` (translate/scale)   │
+   │ and `opacity` ONLY — never layout props (top/left/right/bottom/margin/  │
+   │ width/height/inset). Transform+opacity are GPU-composited: no reflow,   │
+   │ no repaint, smooth at 60fps, and interruptible mid-animation. Moving    │
+   │ the actual position/size janks. Use the `motion` hook below to opt in.  │
+   └───────────────────────────────────────────────────────────────────────┘ */
+/* Two easings + three durations. Bare `transition` utilities inherit the defaults below. */
+@theme {
+	--ease-snappy: cubic-bezier(0.2, 0, 0.15, 1);    /* decisive ease-out — buttons, entrances */
+	--ease-smooth: cubic-bezier(0.4, 0, 0.25, 1);  /* gentle in-out — fades, reversible states */
+
+	--duration-fast: 120ms;                       /* hover / press feedback */
+	--duration-base: 220ms;                       /* default — most transitions */
+	--duration-slow: 400ms;                       /* larger reveals, use sparingly */
+
+	/* What the bare `transition` / `transition-colors` utilities use out of the box */
+	--default-transition-duration: var(--duration-base);
+	--default-transition-timing-function: var(--ease-snappy);
+
+	/* Scroll reveal — blur + rise + fade (Stratus-style). Use: class="animate-fade-in" */
+	--animate-fade-in: fade-in var(--duration-slow) var(--ease-smooth) both;
+	@keyframes fade-in {
+		from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
+		to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+	}
+}
+
+/* v4 has no --duration-* namespace, so expose the tokens as real utilities.
+   Now `duration-fast|base|slow` work in class attributes AND @apply. */
+@utility duration-fast { transition-duration: var(--duration-fast); }
+@utility duration-base { transition-duration: var(--duration-base); }
+@utility duration-slow { transition-duration: var(--duration-slow); }
+
+/* The "motion" hook — add class="motion" to opt an element into transform/opacity
+   animation with the house curve. Transitions ONLY the compositor-friendly props,
+   so changing `translate`/`scale`/`opacity` animates; layout changes never do. */
+@utility motion {
+	transition-property: transform, translate, scale, rotate, opacity;
+	transition-timing-function: var(--ease-snappy);
+	transition-duration: var(--duration-base);
+}
+
+/* Cut motion for users who ask for it (honors the restraint rule). */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* ---------- E F F E C T S ---------- */
+/* Airbnb-style card shadows — a tight contact layer + a soft ambient layer.
+   Subtle but present in light mode; dropped entirely in dark (#7, #8). */
+@theme {
+	--shadow-card:
+		0 1px 2px oklch(0% 0 0 / 0.06),
+		0 4px 12px oklch(0% 0 0 / 0.08),
+		0 14px 32px oklch(0% 0 0 / 0.10);
+	--shadow-card-hover:
+		0 2px 4px oklch(0% 0 0 / 0.07),
+		0 8px 20px oklch(0% 0 0 / 0.10),
+		0 24px 48px oklch(0% 0 0 / 0.14);
+}
+
+/* Frosted glass — translucent surface that blurs whatever is behind it (#12). */
+.frosted-glass {
+    background-color: var(--color-frosted-bg);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+}
+
+/* Progressive blur — overlay whose blur fades out via a gradient mask (#12).
+   Absolutely position it over media so captions stay legible. */
+.progressive-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    -webkit-mask-image: linear-gradient(to top, black 25%, transparent);
+    mask-image: linear-gradient(to top, black 25%, transparent);
+}
+
+/* ---------- C O M P O N E N T   S T A T E S ---------- */
+@layer components {
+    /* Button — default → hover → pressed → disabled, with a subtle depress (#10, #11).
+       Padding is 2:1 horizontal:vertical (#9); gap keeps an icon tight to its label. */
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 select-none
+               rounded-full px-4 py-2
+               bg-button-bg text-inverted-primary-fg
+               transition-[background-color,transform] ease-snappy duration-fast;
+    }
+    .btn:hover    { @apply bg-accent; }
+    .btn:active   { @apply scale-95; }                   /* pressed */
+    .btn:disabled { @apply opacity-50 pointer-events-none; }
+
+    /* Ghost button — depth from surface + border instead of a fill (#7). */
+    .btn-ghost       { @apply bg-transparent text-primary-fg border border-border; }
+    .btn-ghost:hover { @apply bg-secondary-bg; }
+
+    /* Input — default → focused → error → warning (#10). */
+    .input {
+        @apply w-full rounded-lg px-3 py-2 outline-none
+               bg-secondary-bg text-primary-fg placeholder:text-tertiary-fg
+               border border-border
+               transition-colors ease-snappy duration-fast;
+    }
+    .input:focus                { @apply border-accent; }
+    .input[aria-invalid='true'] { @apply border-danger; }
+    .input.is-warning           { @apply border-warning; }
+
+    /* Surface — Airbnb-style card. Light: white + soft shadow. Dark: surface
+       contrast + border, no shadow (#7, #8). Add `hover:shadow-card-hover`
+       on clickable cards for a lift. */
+    .surface {
+        @apply rounded-2xl border border-border
+               bg-primary-bg shadow-card
+               dark:bg-secondary-bg dark:shadow-none
+               transition-shadow ease-snappy duration-base;
+    }
+}
