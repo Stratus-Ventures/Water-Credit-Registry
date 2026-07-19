@@ -1,6 +1,6 @@
-<div>
+<div class="w-full h-fit">
     <!-- LEFT DATA COLUMN -->
-    <section class="">
+    <section class="h-screen">
         <!-- TOTAL CREDITS CREATED -->
         <div>
 
@@ -12,13 +12,13 @@
     </section>
 
     <!-- US MAP -->
-    <section class="">
+    <section class="h-screen">
 
     </section>
 
     <!-- LIVE CREDITS COLUMN -->
     <!-- Create a button to view that list of live credits when you click the topright arrow -->
-    <section class="">
+    <section class="h-screen">
 
     </section>
 </div>

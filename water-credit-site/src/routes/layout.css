@@ -30,6 +30,17 @@
     ::selection { @apply bg-accent-faded text-primary-fg; }
 }
 
+/* ---------- S C R O L L B A R ---------- */
+/* Hidden entirely on every element — scrolling still works, nothing is drawn
+   and no space is reserved (so no layout shift). */
+@layer base {
+    * {
+        scrollbar-width: none;        /* Firefox */
+        -ms-overflow-style: none;     /* old Edge */
+    }
+    *::-webkit-scrollbar { display: none; }   /* WebKit */
+}
+
 /* ---------- T H E M E   S T Y L E S ---------- */
 /* Colors live in @theme so they generate utilities (text-primary-fg, bg-secondary-bg, …).
    .dark overrides the same --color-* vars, so every utility flips in dark mode. */

@@ -2,8 +2,6 @@
 	let { text, class: className = '' }: { text: string; class?: string } = $props();
 </script>
 
-<!-- Desktop affordance: hidden by default, revealed on hover / keyboard focus.
-     v4 gates hover to hover-capable devices, so it never fires on touch. -->
 <span
 	role="tooltip"
 	class="

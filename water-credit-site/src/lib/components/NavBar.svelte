@@ -21,16 +21,15 @@
 
 </script>
 
-<!-- BOTTOM NAVBAR -->
 <nav class="
-    fixed bottom-16 left-0 right-0 z-40
+    fixed bottom-12 sm:bottom-16 left-0 right-0 z-40
     flex flex-row justify-center items-center
     w-fit h-fit p-1 mx-auto rounded-full
     bg-button-bg text-inverted-primary-fg shadow-card dark:shadow-none"
 >
     <!-- Sliding selection circle — tabs are equal width, so shift one tab per index. -->
     <span
-        class="absolute top-1 left-1 z-0 size-12 sm:size-10 rounded-full pointer-events-none
+        class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
                bg-inverted-tertiary-bg transition-[transform,opacity] ease-snappy duration-base"
         style:transform={`translateX(${activeIndex * 100}%)`}
         style:opacity={activeIndex < 0 ? '0' : '1'}
@@ -43,7 +42,7 @@
         <button
             class="
                 group relative z-10 hover:z-30 active:z-30 focus-within:z-30
-                size-12 sm:size-10 grid place-items-center rounded-full
+                size-13 sm:size-10 grid place-items-center rounded-full
                 transition-colors ease-snappy duration-fast
                 { active ? 'text-inverted-primary-fg' : 'text-inverted-secondary-fg hover:text-inverted-primary-fg' }"
             aria-label={'Go to ' + tab.name + ' page'}
