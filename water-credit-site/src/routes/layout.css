@@ -7,7 +7,9 @@
 /* ---------- G L O B A L   S T Y L E S ---------- */
 /* These are the default styles for the whole website */
 @layer base {
-    body { @apply text-primary-fg antialiased select-none; }
+    /* touch-manipulation disables double-tap-to-zoom + the 300ms tap delay
+       (keeps pinch-zoom and scrolling). */
+    body { @apply text-primary-fg antialiased select-none touch-manipulation; }
 
     /* Native form controls (checkbox, radio, range) pick up the brand accent. */
     :root { accent-color: var(--color-accent); }
@@ -117,6 +119,15 @@
 	@keyframes fade-in {
 		from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
 		to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+	}
+
+	/* One-shot label flash: rise + fade in, hold, fade out over 1.5s. Keeps the
+	   -50% x-centering throughout (uses the `translate` property, not transform). */
+	--animate-tooltip-flash: tooltip-flash 1.5s var(--ease-snappy) both;
+	@keyframes tooltip-flash {
+		0%       { opacity: 0; translate: -50% 0.5rem; }
+		12%, 78% { opacity: 1; translate: -50% 0; }
+		100%     { opacity: 0; translate: -50% 0.5rem; }
 	}
 }
 
