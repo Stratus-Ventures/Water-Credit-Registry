@@ -8,8 +8,6 @@
     import ToolTip from './ToolTip.svelte';
     import { onMount } from 'svelte';
 
-    // Flip after first paint so the highlight scales in (scale-0 → scale-100)
-    // on load, instead of being there instantly or sliding in from tab 0.
     let mounted = $state(false);
     onMount(() => (mounted = true));
 
@@ -22,28 +20,30 @@
     ] satisfies { id: number; icon: string; name: string; page: Pathname }[];
 
     const activeIndex = $derived(
-        tabs.findIndex((t) => page.url.pathname === resolve(t.page))
-    );
+		tabs.findIndex((t) => page.url.pathname === resolve(t.page))
+	);
 
 </script>
 
 <nav class="
-    fixed bottom-12 sm:bottom-16 left-0 right-0 z-40
+    fixed bottom-8 sm:bottom-16 left-0 right-0 z-40
     flex flex-row justify-center items-center
-    w-fit h-fit p-1 mx-auto rounded-full bg-button-bg
+    w-fit h-fit p-1 rounded-full bg-button-bg mx-auto
     text-inverted-primary-fg shadow-card dark:shadow-none"
 >
-    <!-- Selection highlight. Positioned with the `translate` property so `scale`
-         is free to animate independently: scales in on load, scales out on non-tab
-         pages, and slides between tabs. transition-transform covers translate+scale.
+    <!-- Selection highlight. Instantly positioned at the active tab on load (the
+         transition is gated behind `mounted`), then slides on click via `translate`.
          Invariant: size == button, no gap between buttons, offset (top/left-1) == p-1. -->
-    <span
-        class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
-               bg-inverted-tertiary-bg transition-transform ease-snappy duration-base
-               {mounted && activeIndex >= 0 ? 'scale-100' : 'scale-0'}"
-        style:translate={`${activeIndex * 100}% 0`}
-        aria-hidden="true"
-    ></span>
+
+    {#if mounted}
+		<span
+			class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
+			       bg-inverted-tertiary-bg transition-transform ease-snappy duration-base"
+			style:translate={`${activeIndex * 100}% 0`}
+			style:opacity={activeIndex < 0 ? '0' : '1'}
+			aria-hidden="true"
+		></span>
+	{/if}
 
     {#each tabs as tab, i (tab.id)}
         {@const active = i === activeIndex}
