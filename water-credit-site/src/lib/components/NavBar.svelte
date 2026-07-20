@@ -32,14 +32,17 @@
     text-inverted-primary-fg shadow-card dark:shadow-none"
 >
     <!-- Selection highlight. Instantly positioned at the active tab on load (the
-         transition is gated behind `mounted`), then slides on click via `translate`.
-         Invariant: size == button, no gap between buttons, offset (top/left-1) == p-1. -->
+         transition is gated behind `mounted`), then slides on click via `transform`.
+         `transform` (not the standalone `translate` property) so mobile engines
+         reliably composite it on the GPU instead of repainting on the main thread;
+         `will-change-transform` promotes the layer without being overridden by the
+         inline transform. Invariant: size == button, no gap, offset (top/left-1) == p-1. -->
 
     {#if mounted}
 		<span
 			class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
-			       bg-inverted-tertiary-bg transition-transform ease-snappy duration-base"
-			style:translate={`${activeIndex * 100}% 0`}
+			       bg-inverted-tertiary-bg transition-transform ease-snappy duration-base will-change-transform"
+			style:transform={`translateX(${activeIndex * 100}%)`}
 			style:opacity={activeIndex < 0 ? '0' : '1'}
 			aria-hidden="true"
 		></span>
