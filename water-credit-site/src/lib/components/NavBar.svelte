@@ -38,38 +38,47 @@
     w-fit h-fit p-1 rounded-full bg-button-bg mx-auto
     text-inverted-primary-fg shadow-card dark:shadow-none"
 >
-    <!-- Selection highlight. Always rendered (positioned at the active tab in SSR
-         too) so there's no pop-in on load. The `transition-transform` class is added
-         only after mount, so the browser never animates the pill's initial value —
-         no slide-in from tab 0 — while clicks still animate once mounted.
-         `transform` (not the standalone `translate` property) so mobile engines
-         reliably composite it on the GPU instead of repainting on the main thread;
-         `will-change-transform` promotes the layer without being overridden by the
-         inline transform. Invariant: size == button, no gap, offset (top/left-1) == p-1. -->
+    <!-- Clip layer: holds ONLY the highlight pill. It hides any pre-hydration slide
+         or offscreen pill position without clipping the tooltips, which live with the
+         buttons in the unclipped sibling below. (An overflow wrapper around the
+         buttons would clip the tooltips too — they're button children, and
+         `overflow-x: hidden` forces `overflow-y` to `auto`, clipping vertically.) -->
+    <div class="absolute inset-0 overflow-hidden rounded-full" aria-hidden="true">
+        <!-- Selection highlight. Always rendered (positioned at the active tab in SSR
+             too) so there's no pop-in on load. The `transition-transform` class is added
+             only after mount, so the browser never animates the pill's initial value —
+             no slide-in from tab 0 — while clicks still animate once mounted.
+             `transform` (not the standalone `translate` property) so mobile engines
+             reliably composite it on the GPU instead of repainting on the main thread;
+             `will-change-transform` promotes the layer without being overridden by the
+             inline transform. Invariant: size == button, offset (top/left-1) == p-1,
+             and the 0.375rem in the step below == the button row's gap-1.5
+             (Tailwind spacing: 0.25rem per step, so gap-N == N * 0.25rem). -->
+        <span
+    		class="absolute top-1 left-1 size-13 sm:size-10 rounded-full pointer-events-none
+    		       bg-inverted-tertiary-bg ease-snappy duration-base will-change-transform
+    		       {mounted ? 'transition-transform' : ''}"
+    		style:transform={`translateX(calc(${activeIndex} * (100% + 0.375rem)))`}
+    		style:opacity={activeIndex < 0 ? '0' : '1'}
+    	></span>
+    </div>
 
-    <span
-		class="absolute top-1 left-1 z-0 size-13 sm:size-10 rounded-full pointer-events-none
-		       bg-inverted-tertiary-bg ease-snappy duration-base will-change-transform
-		       {mounted ? 'transition-transform' : ''}"
-		style:transform={`translateX(${activeIndex * 100}%)`}
-		style:opacity={activeIndex < 0 ? '0' : '1'}
-		aria-hidden="true"
-	></span>
+    <div class="relative flex flex-row w-fit h-fit gap-1.5">
+        {#each tabs as tab, i (tab.id)}
+            {@const active = i === activeIndex}
 
-    {#each tabs as tab, i (tab.id)}
-        {@const active = i === activeIndex}
-
-        <button
-            class="
-                group relative z-10 hover:z-30 active:z-30 focus-within:z-30
-                size-13 sm:size-10 grid place-items-center rounded-full
-                transition-colors ease-snappy duration-fast
-                { active ? 'text-inverted-primary-fg' : 'text-inverted-secondary-fg hover:text-inverted-primary-fg' }"
-            aria-label={'Go to ' + tab.name + ' page'}
-            aria-current={active ? 'page' : undefined}
-            onclick={() => goto(resolve(tab.page))}>
-            <ToolTip text={tab.name}/>
-            <Icon name={tab.icon} class="size-7 sm:size-6"/>
-        </button>
-    {/each}
+            <button
+                class="
+                    group relative z-10 hover:z-30 active:z-30 focus-within:z-30
+                    size-13 sm:size-10 grid place-items-center rounded-full
+                    transition-colors ease-snappy duration-fast
+                    { active ? 'text-inverted-primary-fg' : 'text-inverted-secondary-fg hover:text-inverted-primary-fg' }"
+                aria-label={'Go to ' + tab.name + ' page'}
+                aria-current={active ? 'page' : undefined}
+                onclick={() => goto(resolve(tab.page))}>
+                <ToolTip text={tab.name}/>
+                <Icon name={tab.icon} class="size-7 sm:size-6"/>
+            </button>
+        {/each}
+    </div>
 </nav>
