@@ -1,6 +1,6 @@
 <div class="w-full h-fit">
     <!-- LEFT DATA COLUMN -->
-    <section class="h-screen">
+    <section class="w-2xs h-screen">
         <!-- TOTAL CREDITS CREATED -->
         <div>
 
@@ -18,7 +18,7 @@
 
     <!-- LIVE CREDITS COLUMN -->
     <!-- Create a button to view that list of live credits when you click the topright arrow -->
-    <section class="h-screen">
+    <section class="w-2xs h-screen">
 
     </section>
 </div>

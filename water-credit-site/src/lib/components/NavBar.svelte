@@ -35,7 +35,7 @@
 <nav class="
     fixed bottom-8 sm:bottom-16 left-0 right-0 z-40
     flex flex-row justify-center items-center
-    w-fit h-fit p-1 rounded-full bg-button-bg mx-auto
+    w-fit h-fit p-1 bg-button-bg dark:bg-frosted-bg rounded-3xl mx-auto
     text-inverted-primary-fg shadow-card dark:shadow-none"
 >
     <!-- Clip layer: holds ONLY the highlight pill. It hides any pre-hydration slide
@@ -56,7 +56,7 @@
              (Tailwind spacing: 0.25rem per step, so gap-N == N * 0.25rem). -->
         <span
     		class="absolute top-1 left-1 size-13 sm:size-10 rounded-full pointer-events-none
-    		       bg-inverted-tertiary-bg ease-snappy duration-base will-change-transform
+    		       bg-inverted-tertiary-bg dark:bg-tertiary-bg ease-snappy duration-base will-change-transform
     		       {mounted ? 'transition-transform' : ''}"
     		style:transform={`translateX(calc(${activeIndex} * (100% + 0.375rem)))`}
     		style:opacity={activeIndex < 0 ? '0' : '1'}
@@ -72,7 +72,7 @@
                     group relative z-10 hover:z-30 active:z-30 focus-within:z-30
                     size-13 sm:size-10 grid place-items-center rounded-full
                     transition-colors ease-snappy duration-fast
-                    { active ? 'text-inverted-primary-fg' : 'text-inverted-secondary-fg hover:text-inverted-primary-fg' }"
+                    { active ? 'text-inverted-primary-fg dark:text-primary-fg' : 'text-inverted-secondary-fg hover:text-inverted-primary-fg hover:dark:text-primary-fg' }"
                 aria-label={'Go to ' + tab.name + ' page'}
                 aria-current={active ? 'page' : undefined}
                 onclick={() => goto(resolve(tab.page))}>

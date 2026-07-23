@@ -9,7 +9,7 @@
 @layer base {
     /* touch-manipulation disables double-tap-to-zoom + the 300ms tap delay
        (keeps pinch-zoom and scrolling). */
-    body { @apply text-primary-fg antialiased select-none touch-manipulation; }
+    body { @apply bg-primary-bg text-primary-fg antialiased select-none touch-manipulation; }
 
     /* Native form controls (checkbox, radio, range) pick up the brand accent. */
     :root { accent-color: var(--color-accent); }
@@ -77,7 +77,7 @@
     --color-secondary-bg: oklch(27.4% 0.006 286.033);
     --color-tertiary-bg: oklch(37.1% 0 none);
     --color-inverted-tertiary-bg: oklch(92% 0.004 286.32);
-   	--color-frosted-bg: oklch(14.1% 0.005 285.823 / 0.5);
+   	--color-frosted-bg: oklch(27.4% 0.006 286.033 / 0.5);
     --color-button-bg: oklch(98.5% 0 none);
     --color-border: oklch(37.1% 0 none);
     --color-border-faded: oklch(37.1% 0 none / 0.5);
@@ -97,10 +97,11 @@
       p { @apply text-base font-normal tracking-normal leading-normal select-auto; }        /* Primary reading text, longer prose. */
 }
 
-.body-medium { @apply text-base font-medium tracking-normal leading-normal select-auto; }   /* Primary reading text, Emphasis. */
-.small { @apply text-sm font-normal tracking-normal leading-normal; }                       /* Secondary/meta text, timestamps. */
+.body-medium { @apply text-base font-medium tracking-[-0.01em] leading-normal select-auto; }   /* Primary reading text, Emphasis. */
+.small { @apply text-sm font-normal tracking-[-0.01em] leading-normal; }                       /* Secondary/meta text, timestamps. */
+.caption { @apply text-xs font-normal tracking-[-0.01em] leading-normal; }                       /* Footer links, really small */
 
-.hero-number { @apply text-6xl font-medium tracking-tight leading-normal; }                 /* Signature big number. Realtime count, plan size. */
+.hero-number { @apply text-6xl font-medium tracking-[-0.01em] leading-normal; }                 /* Signature big number. Realtime count, plan size. */
 .metric { @apply text-3xl font-medium tracking-[-0.015em] leading-normal; }                 /* Metric numbers, data values. */
 .stat { @apply text-sm font-medium tracking-[-0.01em] leading-normal; }                     /* Stat-row values, table cells. Medium, near-neutral. */
 
